@@ -8,12 +8,14 @@ ser = serial.Serial('/dev/tty.usbserial-AD026C12', 57600)
 time.sleep(2)
 
 # configure to 'text' mode
-ser.write('#ot')
+ser.write('#osct')
 
 time.sleep(2)
 
+print 'Wait is Over!'
+
 # read serial port and write to file
-data_file = open('train_one_good.txt', 'w+')
+data_file = open('train_five_accel_bad.txt', 'w+')
 cur_time = time.time()
 end_time = time.time() + 30.0
 
