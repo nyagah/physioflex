@@ -29,6 +29,12 @@ public class PhysioFlexTherapist {
         physioData.gyroRoll.add(angle);
     }
 
+    public void getNextYawPitchRoll(Float yaw, Float pitch, Float roll) {
+        physioData.gyroRoll.add(roll);
+        physioData.gyroPitch.add(pitch);
+        physioData.gyroYaw.add(yaw);
+    }
+
     public float parseData(String data) {
         return Float.parseFloat(data);
     }

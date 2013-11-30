@@ -15,6 +15,7 @@ public class RazorFileSim {
 
     // IDs passed to internal message handler
     private static final int MSG_ID__YPR_DATA = 0;
+    private static final int MSG_ID__END = 1;
 
     // Razor Listener
     private RazorListener razorListener;
@@ -22,9 +23,17 @@ public class RazorFileSim {
     // Android context
     Context myContext = null;
 
-    public RazorFileSim(Context c) {
+    FileReaderThread frt;
+    Scanner dataScanner;
+
+    boolean shouldRead = true;
+
+    public RazorFileSim(Context c, RazorListener razorListener) throws IOException {
         myContext = c;
+        frt = new FileReaderThread();
+        this.razorListener = razorListener;
     }
+
 
     // Object pools
     private ObjectPool<float[]> float3Pool = new ObjectPool<float[]>(new ObjectPool.ObjectFactory<float[]>() {
@@ -41,22 +50,49 @@ public class RazorFileSim {
     private class FileReaderThread extends Thread {
         @Override
         public void run () {
-            AssetManager am = myContext.getAssets();
-            try {
-                InputStream is = am.open("armCurl.data");
-                final Scanner dataScanner = new Scanner(is);
-                while (dataScanner.hasNextLine()) {
-                    sendToParentThread(MSG_ID__YPR_DATA, null);
+
+            while(shouldRead && dataScanner.hasNextLine()) {
+                try {
+                    float yaw = dataScanner.nextFloat();
+                    float pitch = dataScanner.nextFloat();
+                    float roll = dataScanner.nextFloat();
+
+                    float[] ypr = float3Pool.get();
+                    ypr[0] = yaw;
+                    ypr[1] = pitch;
+                    ypr[2] = roll;
+
+                    sendToParentThread(MSG_ID__YPR_DATA, ypr);
+//                    Log.d(TAG, "READ LINE");
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
                 }
-            } catch (IOException e) {
-                Log.d(TAG, "IOException in Bluetooth thread: " + e.getMessage());e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
         }
     }
 
-    public void startReading() {
-        FileReaderThread frt = new FileReaderThread();
-        frt.run();
+    public void startReading() throws IOException {
+        AssetManager am = myContext.getAssets();
+        InputStream is = am.open("armCurl.data");
+        dataScanner = new Scanner(is);
+
+        frt.start();
+    }
+
+    public void stopReading() {
+        shouldRead = false;
+        dataScanner.close();
+        try {
+            frt.join();
+        } catch (InterruptedException e) {
+            Log.e(TAG, e.getMessage());
+        }
+//        frt.stop();
     }
 
     /**
@@ -71,6 +107,9 @@ public class RazorFileSim {
                     float[] ypr = (float[]) msg.obj;
                     razorListener.onAnglesUpdate(ypr[0], ypr[1], ypr[2]);
                     float3Pool.put(ypr);
+                    break;
+                case MSG_ID__END:
+                    razorListener.onFinished();
                     break;
             }
         }

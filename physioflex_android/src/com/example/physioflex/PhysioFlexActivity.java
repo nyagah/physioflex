@@ -1,26 +1,28 @@
 package com.example.physioflex;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.physioflex.Excercises.ArmCurl;
 import com.example.physioflex.Razor.RazorFileSim;
+import com.example.physioflex.Razor.RazorListener;
 
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.io.IOException;
 
 public class PhysioFlexActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
 
-//    private static final String TAG = "LEDOnOff";
+    private static final String TAG = "PHYSIO_FLEX";
 
 //    private static final int REQUEST_ENABLE_BT = 1;
 //    private BluetoothAdapter btAdapter = null;
@@ -41,105 +43,96 @@ public class PhysioFlexActivity extends Activity {
     TextView dataView;
     TextView resultView;
 
-    Timer tickTimer;
-    TimerTask printTask;
-    TimerTask stopTask;
 
+    ImageView feedbackImg;
     Handler handler;
 
 
     PhysioFlexTherapist pt;
     ArmCurl armCurl;
-    private RazorFileSim rfs = new RazorFileSim(this);
+    private RazorFileSim rfs;
     boolean finished;
-
-    public void getStopTask() {
-        stopTask = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (finished){
-                                printTask.cancel();
-                                timer.stop();
-                            }
-                        } catch (Exception e) {
-                            dataView.setText(e.getMessage());
-                        }
-                    }
-                });
-            }
-        };
-    }
-
-    public void getPrintTask() {
-        printTask =  new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            rfs.startReading();
-
-                            float minX = -90.0f;
-                            float maxX = 90.0f;
-                            Random rand = new Random();
-                            float finalX = rand.nextFloat() * (maxX - minX) + minX;
-
-                            String currentDataPoint = Float.toString(finalX);
-                            dataView.append(currentDataPoint + "\n");
-
-                            pt.readNext(currentDataPoint);
-                            PhysioFlexTherapist.TherapistThought observation = pt.considerData(armCurl);
-
-                            switch (observation) {
-                                case BAD:
-                                    resultView.append("You're doing it wrong!\n");
-//                                    sendData("1");
-                                    break;
-                                case OK:
-                                    break;
-                                case END_OF_REP:
-                                    resultView.append(String.format("Finished %d reps\n", armCurl.getNumDone()));
-//                                    sendData("0");
-                                    break;
-                                case END_OF_EXERCISE:
-                                    finished = true;
-                                    resultView.append(String.format("Done %d reps\n", armCurl.getNumDone()));
-//                                    sendData("0");
-                                    break;
-                            }
-                        } catch (Exception e) {
-                            dataView.setText(e.getMessage());
-                        }
-                    }
-                });
-            }
-        };
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-//        Log.d(TAG, "In onCreate()");
+        Log.d(TAG, "In onCreate()");
 //        btAdapter = BluetoothAdapter.getDefaultAdapter();
 //        checkBTState();
 
         btnStart = (Button) findViewById(R.id.btn_start);
-        btnEnd = (Button) findViewById(R.id.btn_end);
         timer = (Chronometer) findViewById(R.id.timer);
         dataView = (TextView) findViewById(R.id.dataView);
         resultView = (TextView) findViewById(R.id.resultView);
-        tickTimer = new Timer();
+        feedbackImg = (ImageView) findViewById(R.id.feedBackImg);
         handler = new Handler();
         finished = false;
 
         pt = new PhysioFlexTherapist();
-        armCurl = new ArmCurl(3);
+        armCurl = new ArmCurl(4);
+
+        try {
+            rfs = new RazorFileSim(this, new RazorListener() {
+                @Override
+                public void onConnectAttempt(int attempt, int maxAttempts) {
+    //                Toast.makeText(RazorExample.this, "Connect attempt " + attempt + " of " + maxAttempts + "...", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onConnectOk() {
+    //                Toast.makeText(RazorExample.this, "Connected!", Toast.LENGTH_LONG).show();
+    //                setButtonStateConnected();
+                }
+
+                public void onConnectFail(Exception e) {
+    //                setButtonStateDisconnected();
+    //                Toast.makeText(RazorExample.this, "Connecting failed: " + e.getMessage() + ".", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onAnglesUpdate(float yaw, float pitch, float roll) {
+                   pt.getNextYawPitchRoll(yaw, pitch, roll);
+                   dataView.append(String.format("Y=%f, P=%f, R=%f\n", yaw, pitch, roll));
+
+                    PhysioFlexTherapist.TherapistThought observation = pt.considerData(armCurl);
+
+                   switch (observation) {
+                       case BAD:
+                           feedbackImg.setBackgroundColor(Color.RED);
+                           break;
+                       case OK:
+                           feedbackImg.setBackgroundColor(Color.GREEN);
+                           break;
+                       case END_OF_REP:
+                           resultView.append(String.format("Finished %d reps\n", armCurl.getNumDone()));
+                           break;
+                       case END_OF_EXERCISE:
+                           resultView.append(String.format("Done %d reps\n", armCurl.getNumDone()));
+                           feedbackImg.setBackgroundColor(Color.LTGRAY);
+                           this.onFinished();
+                           break;
+                   }
+                }
+
+                @Override
+                public void onSensorsUpdate(float accX, float accY, float accZ,
+                                            float magX, float magY, float magZ,
+                                            float gyrX, float gyrY, float gyrZ) {}
+
+                @Override
+                public void onIOExceptionAndDisconnect(IOException e) {}
+
+                @Override
+                public void onFinished() {
+                    timer.stop();
+                    rfs.stopReading();
+                }
+            });
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,21 +142,15 @@ public class PhysioFlexActivity extends Activity {
               timer.start();
               dataView.setText("");
               resultView.setText("");
-              getPrintTask();
-              getStopTask();
-
-              tickTimer.scheduleAtFixedRate(printTask, 1000,1000);
-              tickTimer.scheduleAtFixedRate(stopTask, 1100, 1000);
+                try {
+                    rfs.startReading();
+                } catch (IOException e) {
+                    Log.e(TAG,e.getMessage());
+                }
             }
         });
 
-        btnEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timer.stop();
-                printTask.cancel();
-            }
-        });
+
     }
 
 //    @Override

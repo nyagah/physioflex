@@ -54,6 +54,12 @@ public interface RazorListener {
 	 */
 	void onIOExceptionAndDisconnect(IOException e);
 
+    /**
+     * Invoked when the razor read should be done.
+     */
+    void onFinished();
+
+
 	/**
 	 * Invoked when making an attempt to connect.Because connecting via Bluetooth often fails,
 	 * multiple attempts can be made.

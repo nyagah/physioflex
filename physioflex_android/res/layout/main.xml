@@ -21,37 +21,40 @@
                 />
         <TextView
                 android:layout_width="124dp"
-                android:layout_height="281dp"
+                android:layout_height="172dp"
             android:id="@+id/dataView"
-            android:text="meow"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="120dp"
             android:layout_alignTop="@+id/resultView"
             android:layout_alignRight="@+id/timer"
-            android:layout_above="@+id/linearLayout"/>
+            android:layout_above="@+id/feedBackImg"
+            android:maxLines="30"
+            android:scrollbars="vertical"/>
         <TextView
-                android:layout_width="114dp"
-                android:layout_height="286dp"
+                android:layout_width="96dp"
+                android:layout_height="599dp"
             android:id="@+id/resultView"
-            android:text="asd"
-            android:layout_below="@+id/dataLabel"
-            android:layout_toLeftOf="@+id/resultsLabel"/>
+            android:layout_below="@+id/resultsLabel"
+            android:layout_above="@+id/feedBackImg"
+            android:layout_toLeftOf="@+id/dataLabel"
+            android:layout_alignLeft="@+id/timerLabel"/>
 
         <TextView
             android:layout_width="131dp"
             android:layout_height="wrap_content"
-            android:text="Data"
-            android:id="@+id/dataLabel"
+            android:id="@+id/resultsLabel"
             android:layout_alignLeft="@+id/timerLabel"
             android:layout_below="@+id/timerLabel"
             android:layout_alignRight="@+id/dataView"
-            android:layout_toLeftOf="@+id/dataView"/>
+            android:layout_toLeftOf="@+id/dataView"
+
+            android:text="Results"/>
 
         <TextView
             android:layout_width="124dp"
             android:layout_height="141dp"
-            android:text="Results"
-            android:id="@+id/resultsLabel"
+            android:text="Data"
+            android:id="@+id/dataLabel"
             android:layout_alignLeft="@+id/dataView"
             android:layout_below="@+id/timerLabel"
             android:layout_alignRight="@+id/timer"
@@ -69,14 +72,16 @@
                     android:text="Start Recording"
                     android:id="@+id/btn_start"
                    />
-            <Button
-                    android:layout_width="fill_parent"
-                    android:layout_weight="1"
-                    android:layout_height="fill_parent"
-                    android:text="End Recording"
-                    android:id="@+id/btn_end"
-                    />
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:id="@+id/feedBackImg"
+            android:background="@color/neutral_color"
+            android:layout_alignLeft="@+id/timerLabel"
+            android:layout_above="@+id/linearLayout"
+            android:layout_alignRight="@+id/timer"/>
 
 
     </RelativeLayout>
