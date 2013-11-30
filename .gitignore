@@ -1,0 +1,20 @@
+target
+log
+*.iml
+*.ipr
+*.iws
+.idea
+.classpath
+.metadata
+.project
+.settings
+atlassian-ide-plugin.xml
+.ply
+# emacs and vim swap files
+*.swp
+*~
+# Created by in memory cassandra
+tmp
+reports
+doc/*.html
+out/
