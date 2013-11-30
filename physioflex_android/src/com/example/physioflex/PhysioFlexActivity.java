@@ -38,10 +38,13 @@ public class PhysioFlexActivity extends Activity {
 //    private static String address = "20:13:07:18:20:64";
 
     Button btnStart;
-    Button btnEnd;
     Chronometer timer;
     TextView dataView;
     TextView resultView;
+
+    TextView yawVal;
+    TextView rollVal;
+    TextView pitchVal;
 
 
     ImageView feedbackImg;
@@ -64,8 +67,10 @@ public class PhysioFlexActivity extends Activity {
 
         btnStart = (Button) findViewById(R.id.btn_start);
         timer = (Chronometer) findViewById(R.id.timer);
-        dataView = (TextView) findViewById(R.id.dataView);
         resultView = (TextView) findViewById(R.id.resultView);
+        yawVal = (TextView) findViewById(R.id.yaw_val);
+        pitchVal = (TextView) findViewById(R.id.pitch_val);
+        rollVal = (TextView) findViewById(R.id.roll_val);
         feedbackImg = (ImageView) findViewById(R.id.feedBackImg);
         handler = new Handler();
         finished = false;
@@ -94,9 +99,11 @@ public class PhysioFlexActivity extends Activity {
                 @Override
                 public void onAnglesUpdate(float yaw, float pitch, float roll) {
                    pt.getNextYawPitchRoll(yaw, pitch, roll);
-                   dataView.append(String.format("Y=%f, P=%f, R=%f\n", yaw, pitch, roll));
+                   rollVal.setText(String.format("Roll: %f", roll));
+                   yawVal.setText(String.format("Yaw: %f", yaw));
+                   pitchVal.setText(String.format("Pitch: %f", pitch));
 
-                    PhysioFlexTherapist.TherapistThought observation = pt.considerData(armCurl);
+                   PhysioFlexTherapist.TherapistThought observation = pt.considerData(armCurl);
 
                    switch (observation) {
                        case BAD:
@@ -140,8 +147,6 @@ public class PhysioFlexActivity extends Activity {
 
               timer.setBase(SystemClock.elapsedRealtime());
               timer.start();
-              dataView.setText("");
-              resultView.setText("");
                 try {
                     rfs.startReading();
                 } catch (IOException e) {

@@ -92,7 +92,6 @@ public class RazorFileSim {
         } catch (InterruptedException e) {
             Log.e(TAG, e.getMessage());
         }
-//        frt.stop();
     }
 
     /**

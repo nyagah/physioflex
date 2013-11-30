@@ -19,24 +19,13 @@
                 android:id="@+id/timer" android:text="Timer"
                 android:layout_toRightOf="@+id/timerLabel"
                 />
+
         <TextView
-                android:layout_width="124dp"
-                android:layout_height="172dp"
-            android:id="@+id/dataView"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="120dp"
-            android:layout_alignTop="@+id/resultView"
-            android:layout_alignRight="@+id/timer"
-            android:layout_above="@+id/feedBackImg"
-            android:maxLines="30"
-            android:scrollbars="vertical"/>
-        <TextView
-                android:layout_width="96dp"
+                android:layout_width="132dp"
                 android:layout_height="599dp"
             android:id="@+id/resultView"
             android:layout_below="@+id/resultsLabel"
             android:layout_above="@+id/feedBackImg"
-            android:layout_toLeftOf="@+id/dataLabel"
             android:layout_alignLeft="@+id/timerLabel"/>
 
         <TextView
@@ -55,10 +44,9 @@
             android:layout_height="141dp"
             android:text="Data"
             android:id="@+id/dataLabel"
-            android:layout_alignLeft="@+id/dataView"
+            android:layout_toRightOf="@+id/resultView"
             android:layout_below="@+id/timerLabel"
-            android:layout_alignRight="@+id/timer"
-            android:layout_above="@+id/dataView"/>
+            android:layout_above="@+id/resultView"/>
 
         <LinearLayout
                 android:orientation="horizontal"
@@ -82,6 +70,30 @@
             android:layout_alignLeft="@+id/timerLabel"
             android:layout_above="@+id/linearLayout"
             android:layout_alignRight="@+id/timer"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yaw:"
+            android:id="@+id/yaw_val"
+            android:layout_toRightOf="@+id/resultView"
+            android:layout_alignTop="@+id/resultView"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pitch:"
+            android:id="@+id/pitch_val"
+            android:layout_toRightOf="@+id/resultView"
+            android:layout_below="@+id/yaw_val"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Roll:"
+            android:id="@+id/roll_val"
+            android:layout_toRightOf="@+id/resultView"
+            android:layout_below="@+id/pitch_val"/>
 
 
     </RelativeLayout>
