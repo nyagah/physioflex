@@ -1,0 +1,46 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<title></title>
+
+<link rel="stylesheet" href="main.css" type="text/css" />
+</head>
+<body>
+<img src="logo.png" id="logo"/>
+<h2>My Patients</h2>
+<table class="exercises">
+    <thead>
+        <tr>
+            <th>Patient:</th>
+            <th>Exercise #1</th>
+            <th>Exercise #2</th>
+            <th>Exercise #3</th>
+            <th>Exercise #4</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- To add new patients, the first column is the patient name. For styling, make sure it has class "patient".
+             Each cell corresponding to an exercise should have an 'a' tag with class 'exercise-link', and if
+             it's successful, the class 'success', if it's a failure, 'failure', and if it has not been completed,
+             nothing. 
+             If you want, you can make clicking the links show more info - they are active so just bind an event
+             to their onclick() handler, or .click() if you're using jQuery. --!>
+        <tr>
+            <td class="patient">Lewis</td>
+            <td><a href="#" class='exercise-link success'></a></td>
+            <td><a href="#" class='exercise-link' id='changeable'></a></td>
+            <td><a href="#" class='exercise-link success'></a></td>
+            <td><a href="#" class='exercise-link failure'></a></td>
+        </tr>
+        <tr>
+            <td class="patient">Moawia</td>
+            <td><a href="#" class='exercise-link'></a></td>
+            <td><a href="#" class='exercise-link'></a></td>
+            <td><a href="#" class='exercise-link'></a></td>
+            <td><a href="#" class='exercise-link success'></a></td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>
