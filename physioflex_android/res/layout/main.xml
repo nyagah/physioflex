@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:layout_gravity="bottom">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Timer:"
+                android:textColor="@color/label_color"
+                android:id="@+id/timerLabel" android:typeface="monospace"/>
+        <Chronometer
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/timer" android:text="Timer"
+                android:layout_toRightOf="@+id/timerLabel"
+                />
+
+        <TextView
+                android:layout_width="132dp"
+                android:layout_height="599dp"
+            android:id="@+id/resultView"
+            android:layout_below="@+id/resultsLabel"
+            android:layout_above="@+id/feedBackImg"
+            android:layout_alignLeft="@+id/timerLabel"/>
+
+        <TextView
+            android:layout_width="131dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/resultsLabel"
+            android:layout_alignLeft="@+id/timerLabel"
+            android:layout_below="@+id/timerLabel"
+            android:layout_alignRight="@+id/dataView"
+            android:layout_toLeftOf="@+id/dataView"
+
+            android:text="Results"/>
+
+        <TextView
+            android:layout_width="124dp"
+            android:layout_height="141dp"
+            android:text="Data"
+            android:id="@+id/dataLabel"
+            android:layout_toRightOf="@+id/resultView"
+            android:layout_below="@+id/timerLabel"
+            android:layout_above="@+id/resultView"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentBottom="true" android:id="@+id/linearLayout">
+            <Button
+                    android:layout_height="fill_parent"
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:text="Start Recording"
+                    android:id="@+id/btn_start"
+                   />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:id="@+id/feedBackImg"
+            android:background="@color/neutral_color"
+            android:layout_alignLeft="@+id/timerLabel"
+            android:layout_above="@+id/linearLayout"
+            android:layout_alignRight="@+id/timer"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yaw:"
+            android:id="@+id/yaw_val"
+            android:layout_toRightOf="@+id/resultView"
+            android:layout_alignTop="@+id/resultView"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pitch:"
+            android:id="@+id/pitch_val"
+            android:layout_toRightOf="@+id/resultView"
+            android:layout_below="@+id/yaw_val"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Roll:"
+            android:id="@+id/roll_val"
+            android:layout_toRightOf="@+id/resultView"
+            android:layout_below="@+id/pitch_val"/>
+
+
+    </RelativeLayout>
+</LinearLayout>
+
