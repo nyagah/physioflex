@@ -32,20 +32,26 @@
             android:textStyle="bold"
             android:typeface="sans"
             android:gravity="center"
-            android:textColor="@color/counter_color"/>
+            android:textColor="@color/counter_color"
+            android:layout_above="@+id/feedBackImg"/>
 
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="100dp"
                 android:layout_alignParentBottom="true" android:id="@+id/linearLayout">
+
             <Button
-                    android:layout_height="fill_parent"
+                    android:layout_height="108dp"
                     android:layout_width="fill_parent"
-                    android:layout_weight="1"
                     android:text="Reset"
                     android:id="@+id/btn_reset"
-                   />
+                    android:layout_gravity="center"
+                    style="@style/btnStyleGenoa"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginBottom="0dp"/>
         </LinearLayout>
 
         <ImageView
@@ -65,6 +71,16 @@
             android:layout_toRightOf="@+id/timer"
             android:textColor="@color/label_color"
             android:typeface="monospace"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Arm Curl"
+            android:id="@+id/textView"
+            android:layout_alignRight="@+id/resultView"
+            android:layout_alignBottom="@+id/timer"
+            android:textColor="@color/label_color"
+           />
 
 
     </RelativeLayout>

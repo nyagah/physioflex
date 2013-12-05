@@ -8,16 +8,17 @@ public class ArmCurl implements IExercise {
     private int numRepsDone;
     private int numRepsRequired;
 
-    private float highThreshold = 80.0f;
-    private float lowThreshold = 35.0f;
+    private float highThreshold = 45.0f;
+    private float lowThreshold = -40.0f;
 
     private static enum ARM_STATE
     {
         FINISHED_REP,
-        FIRST_QUARTER,
-        SECOND_QUARTER,
-        THIRD_QUARTER,
-        FOURTH_QUARTER
+        FIRST_HALF,
+        TOP,
+        SECOND_HALF,
+//        THIRD_QUARTER,
+//        FOURTH_QUARTER
     }
 
     private ARM_STATE currentState;
@@ -43,25 +44,20 @@ public class ArmCurl implements IExercise {
         switch (currentState) {
             case FINISHED_REP:
                 if (currentAngle > lowThreshold) {
-                    currentState = ARM_STATE.FIRST_QUARTER;
+                    currentState = ARM_STATE.FIRST_HALF;
                 }
                 break;
-            case FIRST_QUARTER:
+            case FIRST_HALF:
                 if (currentAngle > highThreshold) {
-                    currentState = ARM_STATE.SECOND_QUARTER;
+                    currentState = ARM_STATE.TOP;
                 }
                 break;
-            case SECOND_QUARTER:
-                if (currentAngle < lowThreshold) {
-                    currentState = ARM_STATE.THIRD_QUARTER;
+            case TOP:
+                if (currentAngle < highThreshold) {
+                    currentState = ARM_STATE.SECOND_HALF;
                 }
                 break;
-            case THIRD_QUARTER:
-                if (currentAngle > highThreshold) {
-                    currentState = ARM_STATE.FOURTH_QUARTER;
-                }
-                break;
-            case FOURTH_QUARTER:
+            case SECOND_HALF:
                 if (currentAngle < lowThreshold) {
                     currentState = ARM_STATE.FINISHED_REP;
                     numRepsDone += 1;

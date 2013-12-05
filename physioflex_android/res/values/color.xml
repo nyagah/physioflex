@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="label_color">#ffffff</color>
-    <color name="good_color">#ff00ff00</color>
-    <color name="bad_color">#ffff0000</color>
+    <color name="good_color">#ff00a100</color>
+    <color name="bad_color">#ff8c0000</color>
     <color name="neutral_color">#ffcccccc</color>
     <color name="counter_color">#FFFFA451</color>
 </resources>

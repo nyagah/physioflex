@@ -68,7 +68,7 @@ public class RazorFileSim {
 
                         sendToParentThread(MSG_ID__YPR_DATA, ypr);
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(100);
                         } catch (InterruptedException e) {
                             Log.e(TAG, e.getMessage());
                         }
@@ -87,7 +87,7 @@ public class RazorFileSim {
         }
 
         AssetManager am = myContext.getAssets();
-        inStream = am.open("armCurl.data");
+        inStream = am.open("train_glove.data");
         dataScanner = new Scanner(inStream);
     }
     public void startReading() throws IOException {

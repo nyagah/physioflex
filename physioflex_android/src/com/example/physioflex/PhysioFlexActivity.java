@@ -1,13 +1,15 @@
 package com.example.physioflex;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.Chronometer;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.example.physioflex.Excercises.ArmCurl;
 import com.example.physioflex.Razor.RazorFileSim;
 import com.example.physioflex.Razor.RazorListener;
@@ -106,10 +108,10 @@ public class PhysioFlexActivity extends Activity {
 
                    switch (observation) {
                        case BAD:
-                           feedbackImg.setBackgroundColor(Color.RED);
+                           feedbackImg.setBackgroundColor(getResources().getColor(R.color.bad_color)); // Color.RED);
                            break;
                        case OK:
-                           feedbackImg.setBackgroundColor(Color.GREEN);
+                           feedbackImg.setBackgroundColor(getResources().getColor(R.color.good_color));
                            break;
                        case END_OF_REP:
                            resultView.setText(String.format("%d", armCurl.getNumDone())); // String.format("Finished %d reps\n", armCurl.getNumDone()));
