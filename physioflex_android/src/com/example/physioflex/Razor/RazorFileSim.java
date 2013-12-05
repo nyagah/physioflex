@@ -25,7 +25,9 @@ public class RazorFileSim {
 
     FileReaderThread frt;
     Scanner dataScanner;
+    InputStream inStream;
 
+    boolean startedRead = false;
     boolean shouldRead = true;
 
     public RazorFileSim(Context c, RazorListener razorListener) throws IOException {
@@ -47,50 +49,52 @@ public class RazorFileSim {
         parentThreadHandler.obtainMessage(msgId, o).sendToTarget();
     }
 
+
     private class FileReaderThread extends Thread {
         @Override
         public void run () {
 
-            while(shouldRead && dataScanner.hasNextLine()) {
-                try {
-                    float yaw = dataScanner.nextFloat();
-                    float pitch = dataScanner.nextFloat();
-                    float roll = dataScanner.nextFloat();
+            try {
+                while(shouldRead && dataScanner.hasNextLine()) {
 
-                    float[] ypr = float3Pool.get();
-                    ypr[0] = yaw;
-                    ypr[1] = pitch;
-                    ypr[2] = roll;
+                        float yaw = dataScanner.nextFloat();
+                        float pitch = dataScanner.nextFloat();
+                        float roll = dataScanner.nextFloat();
 
-                    sendToParentThread(MSG_ID__YPR_DATA, ypr);
-//                    Log.d(TAG, "READ LINE");
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
+                        float[] ypr = float3Pool.get();
+                        ypr[0] = yaw;
+                        ypr[1] = pitch;
+                        ypr[2] = roll;
+
+                        sendToParentThread(MSG_ID__YPR_DATA, ypr);
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            Log.e(TAG, e.getMessage());
+                        }
+
                 }
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
             }
         }
     }
 
-    public void startReading() throws IOException {
+    public void initDataScanner() throws IOException {
+
+        if(startedRead) {
+            dataScanner.close();
+        }
+
         AssetManager am = myContext.getAssets();
-        InputStream is = am.open("armCurl.data");
-        dataScanner = new Scanner(is);
-
-        frt.start();
+        inStream = am.open("armCurl.data");
+        dataScanner = new Scanner(inStream);
     }
-
-    public void stopReading() {
-        shouldRead = false;
-        dataScanner.close();
-        try {
-            frt.join();
-        } catch (InterruptedException e) {
-            Log.e(TAG, e.getMessage());
+    public void startReading() throws IOException {
+        initDataScanner();
+        if (!startedRead) {
+            startedRead = true;
+            frt.start();
         }
     }
 

@@ -4,4 +4,5 @@
     <color name="good_color">#ff00ff00</color>
     <color name="bad_color">#ffff0000</color>
     <color name="neutral_color">#ffcccccc</color>
+    <color name="counter_color">#FFFFA451</color>
 </resources>
